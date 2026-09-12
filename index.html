@@ -8,6 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="manifest" href="manifest.json">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -45,7 +46,7 @@
         <form id="setupForm" class="space-y-4">
             <div>
                 <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Full Name</label>
-                <input type="text" id="studentNameInput" required placeholder="e.g. Hasan Sayyed" class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none transition text-sm text-white placeholder-slate-500">
+                <input type="text" id="studentNameInput" required placeholder="e.g. John Doe" class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none transition text-sm text-white placeholder-slate-500">
             </div>
             <div>
                 <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Roll Number / UID</label>
@@ -121,5 +122,14 @@
             window.location.href = 'tracker.html';
         });
     </script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js')
+        .then((reg) => console.log('Service Worker registered!'))
+        .catch((err) => console.log('Service Worker registration failed: ', err));
+    });
+  }
+</script>
 </body>
 </html>
