@@ -63,45 +63,80 @@
     <!-- Main Content Area -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full space-y-8">
         
-        <!-- Dashboard Stats Row -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- Overall Percentage Card -->
-            <div onclick="openSummaryModal()" class="glass-card p-6 rounded-3xl shadow-xl hover:border-indigo-500/50 transition cursor-pointer flex items-center justify-between group bg-gradient-to-br from-slate-900/90 light:from-white via-indigo-950/40 light:via-indigo-50 to-slate-900/90 light:to-white">
-                <div class="space-y-1">
-                    <div class="flex items-center space-x-2">
-                        <span class="text-xs font-bold uppercase tracking-wider text-indigo-500">Overall Rate</span>
-                        <i class="fa-solid fa-circle-info text-slate-400 group-hover:text-indigo-500 transition text-xs"></i>
+        <!-- Quick Tools Row -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Subject Attendance Calculator -->
+            <div class="glass-card rounded-3xl shadow-xl p-6 sm:p-7 bg-gradient-to-br from-slate-900/90 light:from-white via-indigo-950/30 light:via-indigo-50 to-slate-900/90 light:to-white border border-slate-800 light:border-slate-200">
+                <div class="flex items-start justify-between gap-4 mb-5">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-10 h-10 rounded-xl bg-indigo-500/15 text-indigo-400 flex items-center justify-center border border-indigo-500/20">
+                                <i class="fa-solid fa-calculator"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-extrabold text-lg">Subject Attendance Calculator</h3>
+                                <p class="text-xs text-slate-400 mt-0.5">Check attendance for a theory, lab, or practical course.</p>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="text-3xl font-extrabold tracking-tight" id="overallPercentage">0%</h3>
-                    <p class="text-xs text-slate-400 font-medium">Click for summary</p>
+                    <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Live</span>
                 </div>
-                <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-600 text-white flex items-center justify-center text-xl shadow-lg shadow-indigo-500/30 group-hover:scale-105 transition duration-200">
-                    <i class="fa-solid fa-chart-pie"></i>
+
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <select id="quickSubjectSelect" onchange="renderQuickSubjectAttendance()" class="flex-1 px-4 py-3 rounded-xl bg-slate-900 light:bg-slate-100 border border-slate-700 light:border-slate-300 text-sm font-semibold focus:ring-2 focus:ring-indigo-500 outline-none">
+                        <option value="">-- Choose Subject / Course --</option>
+                    </select>
+                    <button onclick="switchTab('analytics')" class="px-4 py-3 rounded-xl bg-slate-800 light:bg-slate-200 hover:bg-slate-700 light:hover:bg-slate-300 border border-slate-700 light:border-slate-300 text-xs font-bold transition whitespace-nowrap">
+                        Detailed View
+                    </button>
+                </div>
+
+                <div id="quickSubjectResult" class="mt-4 hidden grid grid-cols-3 gap-3">
+                    <div class="p-3 rounded-xl bg-slate-950/60 light:bg-white border border-slate-800 light:border-slate-200">
+                        <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Attended</p>
+                        <p class="text-xl font-extrabold text-emerald-400 light:text-emerald-600 mt-1" id="quickAttended">0</p>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-950/60 light:bg-white border border-slate-800 light:border-slate-200">
+                        <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Conducted</p>
+                        <p class="text-xl font-extrabold mt-1" id="quickTotal">0</p>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-950/60 light:bg-white border border-slate-800 light:border-slate-200">
+                        <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Attendance</p>
+                        <p class="text-xl font-extrabold text-indigo-400 mt-1" id="quickPercentage">0%</p>
+                    </div>
+                </div>
+                <div id="quickSubjectEmpty" class="mt-4 text-xs text-slate-500 flex items-center gap-2">
+                    <i class="fa-solid fa-circle-info"></i> Select a subject to calculate its current attendance.
                 </div>
             </div>
 
-            <!-- Safe Bunk Calculator Card -->
-            <div class="glass-card p-6 rounded-3xl shadow-xl flex items-center justify-between bg-gradient-to-br from-slate-900/90 light:from-white via-emerald-950/30 light:via-emerald-50 to-slate-900/90 light:to-white">
-                <div class="space-y-1">
-                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Safe Bunk / Deficit</span>
-                    <h3 class="text-2xl font-extrabold tracking-tight" id="safeBunkValue">0 Classes</h3>
-                    <p class="text-xs text-slate-400 font-medium" id="safeBunkAdvice">Maintaining 75% target</p>
+            <!-- My Timetable -->
+            <div class="glass-card rounded-3xl shadow-xl p-6 sm:p-7 bg-gradient-to-br from-slate-900/90 light:from-white via-emerald-950/20 light:via-emerald-50 to-slate-900/90 light:to-white border border-slate-800 light:border-slate-200">
+                <div class="flex items-start justify-between gap-4 mb-5">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center border border-emerald-500/20">
+                            <i class="fa-solid fa-calendar-days"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-extrabold text-lg">My Timetable</h3>
+                            <p class="text-xs text-slate-400 mt-0.5">View the schedule for your selected division and batch.</p>
+                        </div>
+                    </div>
+                    <span id="quickTimetableBatch" class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Batch</span>
                 </div>
-                <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-600 text-white flex items-center justify-center text-xl shadow-lg shadow-emerald-500/30">
-                    <i class="fa-solid fa-shield-halved"></i>
+                <div class="p-4 rounded-2xl bg-slate-950/50 light:bg-slate-100 border border-slate-800 light:border-slate-200 mb-4">
+                    <div class="flex items-center justify-between gap-3">
+                        <div>
+                            <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Active Schedule</p>
+                            <p class="text-sm font-bold mt-1" id="quickTimetableDivision">Loading division...</p>
+                        </div>
+                        <i class="fa-solid fa-arrow-right text-slate-500"></i>
+                    </div>
                 </div>
-            </div>
-
-            <!-- Streak Counter Card -->
-            <div class="glass-card p-6 rounded-3xl shadow-xl flex items-center justify-between bg-gradient-to-br from-slate-900/90 light:from-white via-amber-950/30 light:via-amber-50 to-slate-900/90 light:to-white">
-                <div class="space-y-1">
-                    <span class="text-xs font-bold uppercase tracking-wider text-amber-400">Attendance Streak</span>
-                    <h3 class="text-3xl font-extrabold tracking-tight" id="streakValue">0 Days</h3>
-                    <p class="text-xs text-slate-400 font-medium">Consecutive present days</p>
-                </div>
-                <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-600 text-white flex items-center justify-center text-xl shadow-lg shadow-amber-500/30">
-                    <i class="fa-solid fa-fire"></i>
-                </div>
+                <button onclick="openTimetableModal()" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:opacity-90 text-white font-bold text-sm transition shadow-lg shadow-emerald-600/20 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-table-list"></i>
+                    <span>View My Timetable</span>
+                </button>
             </div>
         </div>
 
@@ -218,6 +253,29 @@
         </div>
 
     </main>
+
+    <!-- PERSONAL TIMETABLE MODAL -->
+    <div id="timetableModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5 z-50">
+        <div class="glass-panel rounded-3xl shadow-2xl max-w-6xl w-full max-h-[92vh] overflow-hidden border-slate-700">
+            <div class="flex items-center justify-between p-5 sm:p-6 border-b border-slate-800 light:border-slate-200">
+                <div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center border border-emerald-500/20">
+                            <i class="fa-solid fa-calendar-days"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-extrabold text-lg">My Timetable</h3>
+                            <p class="text-xs text-slate-400" id="timetableModalSubtitle">Division • Batch</p>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="closeTimetableModal()" class="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-slate-800 transition"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="p-4 sm:p-6 overflow-auto max-h-[calc(92vh-88px)]">
+                <div id="timetableGrid" class="min-w-[760px]"></div>
+            </div>
+        </div>
+    </div>
 
     <!-- COMPREHENSIVE SUMMARY POPUP MODAL -->
     <div id="summaryModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
@@ -372,7 +430,10 @@
 
             currentUser = JSON.parse(savedUser);
             document.getElementById('userBadgeText').innerText = `${currentUser.division} • ${currentUser.batch} • Roll: ${currentUser.rollNo}`;
-            
+            document.getElementById('quickTimetableDivision').innerText = currentUser.division;
+            document.getElementById('quickTimetableBatch').innerText = currentUser.batch.replace('BATCH', 'Batch ');
+            populateSubjectDropdown();
+            populateQuickSubjectDropdown();
             renderCalendar();
             updateOverallStats();
         });
@@ -650,54 +711,14 @@
         }
 
         function updateOverallStats() {
-            let totalClasses = 0;
-            let attendedClasses = 0;
-            let sortedDates = Object.keys(attendanceData).sort();
-            let currentStreak = 0;
-            let tempStreak = 0;
-
-            sortedDates.forEach(dateKey => {
-                const day = attendanceData[dateKey];
-                // Do not count locked future dates towards active stats
-                const dObj = new Date(dateKey);
-                if (dObj <= todayDate && day.status === 'REGULAR' && day.sessions && day.sessions.length > 0) {
-                    let dayTotal = day.sessions.length;
-                    let dayAttended = day.sessions.filter(s => s.present).length;
-                    
-                    totalClasses += dayTotal;
-                    attendedClasses += dayAttended;
-
-                    if (dayTotal > 0 && dayAttended === dayTotal) {
-                        tempStreak++;
-                        currentStreak = tempStreak;
-                    } else if (dayAttended < dayTotal) {
-                        tempStreak = 0;
-                    }
-                }
-            });
-
-            const percentage = totalClasses > 0 ? Math.round((attendedClasses / totalClasses) * 100) : 0;
-            document.getElementById('overallPercentage').innerText = `${percentage}%`;
-            document.getElementById('streakValue').innerText = `${currentStreak} Days`;
-
-            const safeBunkEl = document.getElementById('safeBunkValue');
-            const safeBunkAdvice = document.getElementById('safeBunkAdvice');
-
-            if (totalClasses === 0) {
-                safeBunkEl.innerText = "0 Classes";
-                safeBunkAdvice.innerText = "Start logging attendance";
-            } else {
-                const ratio = attendedClasses / totalClasses;
-                if (ratio >= 0.75) {
-                    const safeCount = Math.floor((attendedClasses - 0.75 * totalClasses) / 0.75);
-                    safeBunkEl.innerText = `${safeCount} Classes`;
-                    safeBunkAdvice.innerText = "Safe to skip before 75%";
-                } else {
-                    const deficitCount = Math.ceil((0.75 * totalClasses - attendedClasses) / 0.25);
-                    safeBunkEl.innerText = `${deficitCount} Classes`;
-                    safeBunkAdvice.innerText = "Needed to reach 75%";
-                }
-            }
+            // The old dashboard KPI cards have been removed. Keep this function as a
+            // lightweight refresh hook so existing save/calendar flows remain intact.
+            populateSubjectDropdown();
+            populateQuickSubjectDropdown();
+            const quickSelect = document.getElementById('quickSubjectSelect');
+            if (quickSelect && quickSelect.value) renderQuickSubjectAttendance();
+            const analyticsSelect = document.getElementById('analyticsSubjectSelect');
+            if (analyticsSelect && analyticsSelect.value) renderSubjectAnalytics();
         }
 
         function openSummaryModal() {
@@ -745,6 +766,144 @@
             document.getElementById('summaryModal').classList.add('hidden');
         }
 
+        function getTrackedSubjectStats(subject) {
+            let total = 0;
+            let attended = 0;
+
+            Object.keys(attendanceData).forEach(dateKey => {
+                const day = attendanceData[dateKey];
+                const dObj = new Date(dateKey);
+                if (dObj <= todayDate && day.status === 'REGULAR' && day.sessions) {
+                    day.sessions.forEach(session => {
+                        if (session.subject === subject) {
+                            total++;
+                            if (session.present) attended++;
+                        }
+                    });
+                }
+            });
+
+            return { total, attended, percentage: total > 0 ? (attended / total) * 100 : 0 };
+        }
+
+        function populateQuickSubjectDropdown() {
+            const select = document.getElementById('quickSubjectSelect');
+            if (!select) return;
+            const previousValue = select.value;
+            select.innerHTML = '<option value="">-- Choose Subject / Course --</option>';
+
+            const subjectsSet = new Set();
+            ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].forEach(dayName => {
+                getBatchSubjectsForDay(dayName).forEach(sub => subjectsSet.add(sub));
+            });
+            Object.keys(attendanceData).forEach(dateKey => {
+                const day = attendanceData[dateKey];
+                const dObj = new Date(dateKey);
+                if (dObj <= todayDate && day.status === 'REGULAR' && day.sessions) {
+                    day.sessions.forEach(session => subjectsSet.add(session.subject));
+                }
+            });
+
+            [...subjectsSet].sort((a, b) => a.localeCompare(b)).forEach(subject => {
+                const opt = document.createElement('option');
+                opt.value = subject;
+                opt.innerText = subject;
+                select.appendChild(opt);
+            });
+
+            if ([...select.options].some(o => o.value === previousValue)) {
+                select.value = previousValue;
+                renderQuickSubjectAttendance();
+            }
+        }
+
+        function renderQuickSubjectAttendance() {
+            const select = document.getElementById('quickSubjectSelect');
+            const result = document.getElementById('quickSubjectResult');
+            const empty = document.getElementById('quickSubjectEmpty');
+            if (!select || !result || !empty) return;
+
+            const subject = select.value;
+            if (!subject) {
+                result.classList.add('hidden');
+                empty.classList.remove('hidden');
+                return;
+            }
+
+            const stats = getTrackedSubjectStats(subject);
+            document.getElementById('quickAttended').innerText = stats.attended;
+            document.getElementById('quickTotal').innerText = stats.total;
+            document.getElementById('quickPercentage').innerText = `${stats.percentage.toFixed(2)}%`;
+            result.classList.remove('hidden');
+            empty.classList.add('hidden');
+        }
+
+        function openTimetableModal() {
+            if (!currentUser) return;
+            document.getElementById('timetableModalSubtitle').innerText = `${currentUser.division} • ${currentUser.batch.replace('BATCH', 'Batch ')}`;
+            renderTimetableGrid();
+            document.getElementById('timetableModal').classList.remove('hidden');
+        }
+
+        function closeTimetableModal() {
+            document.getElementById('timetableModal').classList.add('hidden');
+        }
+
+        function renderTimetableGrid() {
+            const container = document.getElementById('timetableGrid');
+            const timetable = masterTimetables[currentUser.division] || {};
+            const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+            const slotTimes = {
+                1: '8:15–9:15', 2: '9:15–10:15', 3: '10:15–11:15',
+                4: '11:15–12:15', 5: '12:15–1:15', 6: '1:15–2:15',
+                7: '2:15–3:15', 8: '3:15–4:15', 9: '4:15–5:15'
+            };
+
+            const byDayAndSlot = {};
+            days.forEach(day => {
+                byDayAndSlot[day] = {};
+                (timetable[day] || []).forEach(entry => {
+                    let subject = '';
+                    if (entry.name && entry.name.ALL) subject = entry.name.ALL;
+                    else if (entry.name && entry.name[currentUser.batch]) subject = entry.name[currentUser.batch];
+                    if (!subject) return;
+                    entry.slots.forEach(slot => { byDayAndSlot[day][slot] = subject; });
+                });
+            });
+
+            let html = `
+                <div class="mb-4 flex flex-wrap gap-2 text-[10px] font-bold uppercase tracking-wider">
+                    <span class="px-2.5 py-1 rounded-lg bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Lecture</span>
+                    <span class="px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Practical</span>
+                    <span class="px-2.5 py-1 rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20">Tutorial</span>
+                </div>
+                <div class="overflow-hidden rounded-2xl border border-slate-800 light:border-slate-200">
+                <table class="w-full border-collapse text-left">
+                    <thead>
+                        <tr class="bg-slate-900/90 light:bg-slate-100">
+                            <th class="p-3 text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-800 light:border-slate-200">Time</th>
+                            ${days.map(day => `<th class="p-3 text-xs font-extrabold text-center border-b border-slate-800 light:border-slate-200">${day}</th>`).join('')}
+                        </tr>
+                    </thead><tbody>`;
+
+            for (let slot = 1; slot <= 9; slot++) {
+                html += `<tr class="border-b border-slate-800/80 light:border-slate-200 last:border-b-0">
+                    <td class="p-3 align-top bg-slate-950/40 light:bg-slate-50 whitespace-nowrap">
+                        <p class="text-xs font-bold">Slot ${slot}</p><p class="text-[10px] text-slate-500 mt-0.5">${slotTimes[slot]}</p>
+                    </td>`;
+                days.forEach(day => {
+                    const subject = byDayAndSlot[day][slot];
+                    const type = subject ? getSessionType(subject) : '';
+                    const badge = type === 'Practical' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : type === 'Tutorial' ? 'bg-purple-500/10 text-purple-400 border-purple-500/20' : 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20';
+                    html += `<td class="p-2 align-top h-20 ${subject ? 'bg-slate-900/30 light:bg-white' : 'bg-slate-950/10 light:bg-slate-50/50'}">${subject ? `<div class="h-full min-h-14 p-2 rounded-xl border ${badge}"><p class="text-xs font-extrabold">${subject}</p><p class="text-[9px] uppercase font-bold mt-1 opacity-70">${type}</p></div>` : '<div class="h-full min-h-14 flex items-center justify-center text-slate-600 text-xs">—</div>'}</td>`;
+                });
+                html += '</tr>';
+            }
+
+            html += '</tbody></table></div>';
+            container.innerHTML = html;
+        }
+
         function populateSubjectDropdown() {
             const select = document.getElementById('analyticsSubjectSelect');
             select.innerHTML = '<option value="">-- Choose a Subject --</option>';
@@ -785,23 +944,10 @@
             placeholder.classList.add('hidden');
             detailView.classList.remove('hidden');
 
-            let subTotal = 0;
-            let subAttended = 0;
-
-            Object.keys(attendanceData).forEach(dateKey => {
-                const day = attendanceData[dateKey];
-                const dObj = new Date(dateKey);
-                if (dObj <= todayDate && day.status === 'REGULAR' && day.sessions) {
-                    day.sessions.forEach(s => {
-                        if (s.subject === subject) {
-                            subTotal++;
-                            if (s.present) subAttended++;
-                        }
-                    });
-                }
-            });
-
-            const subPercentage = subTotal > 0 ? Math.round((subAttended / subTotal) * 100) : 0;
+            const stats = getTrackedSubjectStats(subject);
+            const subTotal = stats.total;
+            const subAttended = stats.attended;
+            const subPercentage = Math.round(stats.percentage);
 
             document.getElementById('selectedSubjectName').innerText = subject;
             document.getElementById('selectedSubjectPercentage').innerText = `${subPercentage}%`;
